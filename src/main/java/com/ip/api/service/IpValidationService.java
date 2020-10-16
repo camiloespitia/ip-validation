@@ -1,6 +1,5 @@
 package com.ip.api.service;
 
-import com.ip.api.entity.BlackList;
 import com.ip.api.exception.IpValidationServiceException;
 
 /**

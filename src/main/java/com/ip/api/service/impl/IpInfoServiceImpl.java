@@ -3,11 +3,13 @@ package com.ip.api.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ip.api.constant.Constants;
 import com.ip.api.dto.IpInfoDTO;
 import com.ip.api.dto.IpInfoResponseDTO;
 import com.ip.api.exception.IpInfoServiceException;
 import com.ip.api.service.IpInfoService;
 import com.ip.api.service.IpValidationService;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,11 +22,15 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author cristian.espitia
  */
 @Slf4j
 @Service
+@Data
 public class IpInfoServiceImpl implements IpInfoService {
 
     @Value("${currency.value.url}")
@@ -47,7 +53,7 @@ public class IpInfoServiceImpl implements IpInfoService {
     }
 
     @Override
-    public IpInfoResponseDTO queryIpInfo(IpInfoDTO ipInfoDTO) throws IpInfoServiceException, JsonProcessingException {
+    public IpInfoResponseDTO queryIpInfo(IpInfoDTO ipInfoDTO) throws IpInfoServiceException {
         if (ipValidationService.isInBlackList(ipInfoDTO.getIpValue())) {
             throw new IpInfoServiceException("The IP is on a blacklist.");
         }
@@ -71,21 +77,21 @@ public class IpInfoServiceImpl implements IpInfoService {
             return IpInfoResponseDTO.builder().countryName(countryName.asText()).countryIso(countryCode.asText()).build();
         } catch (HttpStatusCodeException | JsonProcessingException exception) {
             log.error(exception.getMessage());
-            throw new IpInfoServiceException(String.format("service (%s) not available", countryURL));
+            throw new IpInfoServiceException(String.format(Constants.LOG_ERROR_SERVICE, countryURL));
         }
     }
     @Cacheable(cacheNames="currency")
     public String getCurrencyByCountryName(String countryName) throws IpInfoServiceException {
         try {
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> response = restTemplate.exchange(currencyURL+countryName, HttpMethod.GET, null, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(currencyURL+countryName+"?fields={fields}", HttpMethod.GET, null, String.class, "currencies");
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(response.getBody()).get(0);
-            JsonNode currencies = root.path("currencies").get(0);
+            JsonNode currencies = root.get("currencies").get(0);
             return currencies.get("code").asText();
         } catch (HttpStatusCodeException | JsonProcessingException exception) {
             log.error(exception.getMessage());
-            throw new IpInfoServiceException(String.format("service (%s) not available", currencyURL));
+            throw new IpInfoServiceException(String.format(Constants.LOG_ERROR_SERVICE, currencyURL));
         }
     }
 
@@ -107,7 +113,7 @@ public class IpInfoServiceImpl implements IpInfoService {
             return root.path("rates").get(currency).asText();
         } catch (HttpStatusCodeException | JsonProcessingException exception) {
             log.error(exception.getMessage());
-            throw new IpInfoServiceException(String.format("service (%s) not available", currencyValueURL));
+            throw new IpInfoServiceException(String.format(Constants.LOG_ERROR_SERVICE, currencyValueURL));
         }
     }
 }

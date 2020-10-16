@@ -29,6 +29,8 @@ dependencies {
 	compile group: 'org.json', name: 'json', version: '20200518'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
 	compile("org.springframework.boot:spring-boot-starter-cache")
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('org.mockito:mockito-junit-jupiter:2.23.0')
 }
 
 test {
