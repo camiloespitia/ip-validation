@@ -12,6 +12,8 @@ com/ip/api/service/IpValidationService.java
  com.ip.api.service.IpValidationService
 com/ip/api/controller/IpController.java
  com.ip.api.controller.IpController
+com/ip/api/exception/IpValidationServiceException.java
+ com.ip.api.exception.IpValidationServiceException
 com/ip/api/service/impl/IpValidationServiceImpl.java
  com.ip.api.service.impl.IpValidationServiceImpl
 com/ip/api/repository/BlackListRepository.java
