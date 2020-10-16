@@ -15,6 +15,11 @@
 4. Por ultimo despliegue el contenedor:
 
   > docker run -d -p 10001:10001 --name ip-validation --link mysql-standalone:mysql ip-validation
+  
+ Puede verificar los logs de la aplicacion con 
+ 
+  > docker container logs ip-validation
+
 
 En el siguiente archivo encontrara informacion para las pruebas, endpoints y screenshots de pruebas. 
 https://docs.google.com/document/d/1e7TdFZIqjVDX2LVlw8cFBwegpkYFSVwoBIvmwQt2pp4/edit?usp=sharing
