@@ -1,2 +1,0 @@
-com/ip/api/ApiApplicationTests.java
- com.ip.api.ApiApplicationTests
