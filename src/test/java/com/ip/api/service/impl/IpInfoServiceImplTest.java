@@ -57,7 +57,7 @@ public class IpInfoServiceImplTest {
         Mockito.when(restTemplate.exchange(ipInfoService.getCurrencyURL() + ipInfoResponseDTO.getCountryName() + "?fields={fields}", HttpMethod.GET, null, String.class, "currencies")).thenReturn(this.getResponseCurrency());
         Mockito.when(restTemplate.exchange(builder.toString(), HttpMethod.GET, null, String.class)).thenReturn(this.getCurrencyValue());
         IpInfoResponseDTO result = ipInfoService.queryIpInfo(ipInfoDTO);
-        Assert.assertTrue(result.equals(ipInfoResponseDTO));
+        Assert.assertEquals(result, ipInfoResponseDTO);
 
     }
 

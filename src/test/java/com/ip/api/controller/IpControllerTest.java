@@ -48,6 +48,6 @@ public class IpControllerTest {
         Mockito.when(ipValidationService.addToBlackList(banIpDTO.getIpValue())).thenReturn(banIpDTO.getIpValue());
         ResponseEntity<String> result = ipController.banIp(banIpDTO);
         Assert.assertNotNull(result.getBody());
-        Assert.assertTrue(result.getStatusCode().equals(HttpStatus.OK));
+        Assert.assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 }
